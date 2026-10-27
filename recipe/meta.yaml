@@ -1,0 +1,58 @@
+{% set name = "wcmatch" %}
+{% set version = "11.2" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  - url: https://github.com/facelessuser/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+    sha256: 58a0a66349f46ee165db5101825a6455e3c46ec54218aa3c7fbed95ab15095c8
+
+build:
+  number: 0
+  skip: true # [py<311]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python
+    - hatchling >=0.21.1
+    - pip
+  run:
+    - python
+    - bracex >=3.2
+
+test:
+  source_files:
+    - tests
+    - docs
+    - wcmatch
+    - pyproject.toml
+    - README.md
+  imports:
+    - wcmatch
+  commands:
+    - pip check
+    - pytest -vv
+  requires:
+    - pip
+    - python
+    - pytest
+
+about:
+  summary: Wildcard/glob file name matcher.
+  description: |
+    Wildcard Match translates the more simple, path-centric
+    syntax of glob patterns to regular expression for the purpose of iterating and matching file systems.
+  license: MIT
+  license_file: LICENSE.md
+  license_family: MIT
+  homepage: https://github.com/facelessuser/wcmatch
+  doc_url: https://wcmatch.readthedocs.io/
+  dev_url: https://github.com/facelessuser/wcmatch
+
+extra:
+  recipe-maintainers:
+    - asford
+    - ocefpaf
